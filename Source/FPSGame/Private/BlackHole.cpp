@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Developed within course "Unreal Engine 4 Mastery: Create Multiplayer Games with C++"
 
 #include "BlackHole.h"
 
