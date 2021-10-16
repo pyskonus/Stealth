@@ -6,7 +6,7 @@
 
 AExtractionZone::AExtractionZone()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	OverlapComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapComponent"));
 	OverlapComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -21,6 +21,24 @@ AExtractionZone::AExtractionZone()
 	DecalComponent->SetupAttachment(RootComponent);
 
 	OverlapComponent->OnComponentBeginOverlap.AddDynamic(this, &AExtractionZone::HandleOverlap);
+}
+
+void AExtractionZone::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	InitialLocation = GetActorLocation();
+	UE_LOG(LogTemp, Warning, TEXT("Initial: %f"), InitialLocation.Z);
+}
+
+void AExtractionZone::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	FVector NewLocation = InitialLocation;
+	NewLocation.Z += Amplitude * FMath::Sin(GetGameTimeSinceCreation() * Period);
+	UE_LOG(LogTemp, Warning, TEXT("Tick: %f"), Amplitude * FMath::Sin(GetGameTimeSinceCreation() * Period));
+	SetActorLocation(NewLocation);
 }
 
 void AExtractionZone::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
