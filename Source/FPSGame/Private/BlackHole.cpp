@@ -8,14 +8,14 @@ ABlackHole::ABlackHole()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	/*MeshComponent->SetCollisionEnabled(ECollisionEnabled::);*/
 	SetRootComponent(MeshComponent);
 
-	InnerSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("InnerSphereComponent"));
+	/*InnerSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("InnerSphereComponent"));
 	InnerSphereComponent->SetSphereRadius(100.0f);
-	InnerSphereComponent->SetupAttachment(GetRootComponent());
+	InnerSphereComponent->SetupAttachment(GetRootComponent());*/
 
-	InnerSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABlackHole::OverlapInnerSphere);
+	/*InnerSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABlackHole::OverlapInnerSphere);*/
 
 	OuterSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("OuterSphereComponent"));
 	OuterSphereComponent->SetSphereRadius(3000.0f);
@@ -24,25 +24,38 @@ ABlackHole::ABlackHole()
 
 void ABlackHole::OverlapInnerSphere(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor)
-		OtherActor->Destroy();
+	/*if (OtherActor)
+		OtherActor->Destroy();*/
+	///
+}
+
+void ABlackHole::TurnOn()
+{
+	On = true;
+}
+
+void ABlackHole::TurnOff()
+{
+	On = false;
 }
 
 void ABlackHole::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	TArray<UPrimitiveComponent*> OverlappingComps;
-	OuterSphereComponent->GetOverlappingComponents(OverlappingComps);
-
-	for (int32 i = 0; i < OverlappingComps.Num(); ++i)
+	if (On)
 	{
-		UPrimitiveComponent* PrimComp = OverlappingComps[i];
-		if (PrimComp && PrimComp->IsSimulatingPhysics())
+		TArray<UPrimitiveComponent*> OverlappingComps;
+		OuterSphereComponent->GetOverlappingComponents(OverlappingComps);
+
+		for (int32 i = 0; i < OverlappingComps.Num(); ++i)
 		{
-			const float SphereRadius = OuterSphereComponent->GetScaledSphereRadius();
-			const float Force = -2000;
-			PrimComp->AddRadialForce(GetActorLocation(), SphereRadius, Force, ERadialImpulseFalloff::RIF_Constant, true);
+			UPrimitiveComponent* PrimComp = OverlappingComps[i];
+			if (PrimComp && PrimComp->IsSimulatingPhysics())
+			{
+				const float SphereRadius = OuterSphereComponent->GetScaledSphereRadius();
+				PrimComp->AddRadialForce(GetActorLocation(), SphereRadius, Force, ERadialImpulseFalloff::RIF_Linear, true);
+			}
 		}
 	}
 }

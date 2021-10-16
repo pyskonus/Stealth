@@ -12,6 +12,7 @@ class UCameraComponent;
 class AFPSProjectile;
 class USoundBase;
 class UAnimSequence;
+class ABlackHole;
 
 
 UCLASS()
@@ -48,11 +49,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 	UAnimSequence* FireAnimation;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay")
-	bool bIsCarryingObjective;
+	/*UPROPERTY(BlueprintReadOnly, Category = "Gameplay")
+	bool bIsCarryingObjective;*/
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	TSoftObjectPtr<ABlackHole> BlackHole;
 
 protected:
-	
 	/** Fires a projectile. */
 	void Fire();
 

@@ -17,13 +17,24 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void TurnOn();
+
+	UFUNCTION()
+	void TurnOff();
+
 protected:
+	UPROPERTY(EditAnywhere, Category = "Params")
+	float Force = -8000.f;
+
+	bool On = false;
+	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
 
 	/*inner sphere destroys overlapping actors*/
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USphereComponent* InnerSphereComponent;
+	/*UPROPERTY(VisibleAnywhere, Category = "Components")
+	USphereComponent* InnerSphereComponent;*/
 
 	/*outer sphere applies force to physically simulating actors*/
 	UPROPERTY(VisibleAnywhere, Category = "Components")

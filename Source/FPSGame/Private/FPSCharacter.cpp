@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "BlackHole.h"
 
 
 AFPSCharacter::AFPSCharacter()
@@ -38,13 +39,15 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::Fire);
 
+	PlayerInputComponent->BindAction("BlackHole", IE_Pressed, BlackHole.Get(), &ABlackHole::TurnOn);
+	PlayerInputComponent->BindAction("BlackHole", IE_Released, BlackHole.Get(), &ABlackHole::TurnOff);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 }
-
 
 void AFPSCharacter::Fire()
 {
