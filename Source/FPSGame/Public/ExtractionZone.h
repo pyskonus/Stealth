@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Blinking")
 	float Period = 2.5f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	USoundBase* ObjectiveMissingSound;
+
 	FVector InitialLocation;
 
 	UFUNCTION()
